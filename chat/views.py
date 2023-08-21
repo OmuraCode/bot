@@ -7,7 +7,7 @@ from .serializers import ChatbotInputSerializer, ChatbotResponseSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Intent, IntentText
+from intents.models import Intent, IntentText
 
 
 def clean(line):

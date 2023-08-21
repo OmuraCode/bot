@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'chat',
     # 'messages'
+    'intents'
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,17 @@ REST_FRAMEWORK = {
 
 openai.api_key = config('OPENAI_KEY')
 
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'DEBUG',  # Установите нужный уровень логирования
+#     },
+# }

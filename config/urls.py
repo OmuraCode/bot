@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/accounts/', include('account.urls')),
     path('api/v1/', include('chat.urls')),
+    path('api/v1/', include('intents.urls')),
 ]
