@@ -1,0 +1,89 @@
+{
+   "intents":[
+      {
+         "intent":"AnimalFacts",
+         "text":[
+            "Tell me an interesting fact about animals."
+         ],
+         "responses":[
+            "Sure! Did you know that a group of crows is called a 'murder'?",
+            "Here's an animal fact: Dolphins are known for their intelligence and use of complex communication."
+         ],
+         "extension":{
+            "function":"animal_fact",
+            "entities":true,
+            "responses":[
+               "Sure! Here's a fascinating fact about animals."
+            ]
+         },
+         "context":{
+            "in":"idle",
+            "out":"fact_shared",
+            "clear":true
+         },
+         "entityType":"AnimalType",
+         "entities":[
+            {
+               "entity":"crow",
+               "value":"animal"
+            },
+            {
+               "entity":"dolphins",
+               "value":"animal"
+            }
+         ]
+      },
+      {
+         "intent":"SpaceFacts",
+         "text":[
+            "Give me a fascinating fact about space."
+         ],
+         "responses":[
+            "Absolutely! The Milky Way galaxy is estimated to be around 100,000 light-years in diameter.",
+            "Sure thing! Space is incredibly vast, with billions of galaxies each containing billions of stars."
+         ],
+         "extension":{
+            "function":"space_fact",
+            "entities":false,
+            "responses":[
+               "Certainly! Here's an interesting space fact."
+            ]
+         },
+         "context":{
+            "in":"idle",
+            "out":"fact_shared",
+            "clear":false
+         },
+         "entityType":"NA",
+         "entities":[
+
+         ]
+      },
+      {
+         "intent":"PlantFacts",
+         "text":[
+            "Tell me an intriguing fact about plants."
+         ],
+         "responses":[
+            "Of course! Some plants, like the Venus flytrap, are carnivorous and can capture insects for nutrients.",
+            "Certainly! Did you know that bamboo can grow incredibly fast, sometimes up to 3 feet in a single day?"
+         ],
+         "extension":{
+            "function":"plant_fact",
+            "entities":false,
+            "responses":[
+               "Absolutely! Here's a fascinating plant fact."
+            ]
+         },
+         "context":{
+            "in":"idle",
+            "out":"fact_shared",
+            "clear":true
+         },
+         "entityType":"NA",
+         "entities":[
+
+         ]
+      }
+   ]
+}

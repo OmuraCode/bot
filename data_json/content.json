@@ -1,0 +1,51 @@
+{"intents": [
+    {"intent": "1",
+     "text": ["Hi","Is anyone there?", "Hello"],
+     "responses": ["Hi", "Hello", "Hi there, how can I help?"]
+    },
+    {"intent": "2",
+     "text": ["Who are you","What is you name","Do you have a name"],
+     "responses": ["Hi, I'm Boo", "My name is Boo", "I'm Boo"]
+    },
+    {"intent": "5",
+     "text": ["How is the weather today"],
+     "responses": ["It's sunny day"]
+    },
+    {"intent": "6",
+     "text": ["What events are available today"],
+     "responses": ["Live in concent will be at UOM JJ hall"]
+    },
+    {"intent": "7",
+     "text": ["How are you","What's up"],
+     "responses": ["I'm fine, Thanks for asking.","I'm doing well","I'm fine. And you ?"]
+    },
+    {"intent": "goodbye",
+     "text": ["Bye", "See you later", "Goodbye"],
+     "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."]
+    },
+    {"intent": "9",
+     "text": ["Thank you"],
+     "responses": ["You are welcome"]
+    },
+    {"intent": "10",
+     "text": ["Tell me a joke", "Can you make me laugh?", "Give me something funny"],
+    "responses": ["Why don't scientists trust atoms? Because they make up everything!", "Sure, here's one: Why did the scarecrow win an award? Because he was outstanding in his field!"]
+    },
+    {"intent": "11",
+     "text": ["What's the capital of France?"],
+     "responses": ["The capital of France is Paris."]
+    },
+    {"intent": "12",
+     "text": ["What are some popular dessert recipes?"],
+     "responses": ["Popular dessert recipes include cheesecake, apple pie, and brownies."]
+    },
+    {"intent": "13",
+     "text": ["Tell me about artificial intelligence."],
+     "responses": ["Artificial intelligence is the simulation of human intelligence in machines, enabling them to perform tasks that typically require human intelligence."]
+    },
+    {"intent": "14",
+     "text": ["Tell me about the theory of evolution."],
+     "responses": ["The theory of evolution proposes that species change over time through natural selection, leading to the development of new species."]
+    }
+]
+}

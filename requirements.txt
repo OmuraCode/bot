@@ -1,0 +1,11 @@
+django
+psycopg2-binary
+openai
+djangorestframework
+python-decouple
+dj_rest_auth
+PyPDF2
+nltk
+numpy
+tensorflow
+scikit-learn
