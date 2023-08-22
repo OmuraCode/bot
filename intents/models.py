@@ -2,19 +2,22 @@ import json
 from django.db import models
 
 class Intent(models.Model):
-    intent = models.CharField(max_length=255)
+    intent = models.CharField(max_length=255) # unique=True надо сделать
     function = models.CharField(max_length=255, blank=True)
     entities = models.BooleanField(default=False)
     context_in = models.CharField(max_length=255, blank=True)
     context_out = models.CharField(max_length=255, blank=True)
     context_clear = models.BooleanField(default=False)
     entity_type = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class IntentText(models.Model):
-    intent = models.ForeignKey(Intent, on_delete=models.CASCADE)
+    intent = models.ForeignKey(Intent, on_delete=models.CASCADE, related_name='intent_texts')
     language = models.CharField(max_length=10)  # For example: "RU", "KG"
     texts = models.JSONField()
     responses = models.JSONField()
+
 
 class Entity(models.Model):
     intent1 = models.ForeignKey(Intent, on_delete=models.CASCADE)
@@ -59,6 +62,3 @@ def load_data_to_database(json_file_path):
 
 # Замените 'path_to_your_json.json' на актуальный путь к вашему JSON файлу
 # load_data_to_database('data_json/case.json')
-
-
-

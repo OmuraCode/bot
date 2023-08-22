@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from intents.models import Intent, IntentText
+from keras.models import load_model
 
 
 def clean(line):
@@ -84,10 +85,15 @@ model = tf.keras.models.Sequential([
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 # model.summary()
-# model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
 model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
 
+# Сохраните модель в файл
+# model.save('lstmModel')
+# Загрузка модели
+# loaded_model = load_model('lstmModel')
+# Дообучение модели
+# loaded_model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0, initial_epoch=epochs)
 
 class ChatbotView(APIView):
     def post(self, request):
@@ -101,11 +107,11 @@ class ChatbotView(APIView):
                 if language_choice:
                     request.session['language_choice'] = language_choice
                     if language_choice == 'KG':
-                        response = "Саламатсызбы, кандай суроонузга жооп бере алам?"
+                        response = 'Саламатсызбы, кандай суроонузга жооп бере алам?'
                     else:
                         response = 'Здравствуйте, чем могу быть полезен?'
                 else:
-                    response = "Пожалуйста, выберите язык: 1 - кыргызский, 2 - русский."
+                    response = 'Пожалуйста, выберите язык: 1 - кыргызский, 2 - русский.'
             else:
                 language_choice = request.session['language_choice']
                 response = self.get_response(user_input, language_choice)
@@ -136,8 +142,17 @@ class ChatbotView(APIView):
         sent_tokens = tf.expand_dims(sent_tokens, 0)
         pred = model.predict(sent_tokens)
         pred_class = np.argmax(pred, axis=1)
+        max_pred_prob = np.max(pred)
 
-        selected_intent = index_to_intent[pred_class[0]]
+        # Define a threshold probability for fallback intent
+        fallback_threshold = 0.1
+        print(max_pred_prob, '!!!!!')
+        print(fallback_threshold, '+++++++++')
+
+        if max_pred_prob < fallback_threshold:
+            selected_intent = "FallbackResponse"
+        else:
+            selected_intent = index_to_intent[pred_class[0]]
 
         if selected_intent in response_for_intent:
             if language_choice == 'KG':
@@ -152,3 +167,4 @@ class ChatbotView(APIView):
             return selected_response
 
         return "I'm sorry, I don't have a response for that."
+

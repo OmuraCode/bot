@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import IntentSerializer, IntentTextSerializer
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .models import Intent
+from .models import Intent, IntentText
 
 
 
@@ -42,8 +42,12 @@ class IntentDetailView(APIView):
     def get(self, request, pk, format=None):
         try:
             intent = self.get_object(pk)
-            serializer = IntentSerializer(intent)
-            return Response(serializer.data)
+            intent_serializer = IntentSerializer(intent)
+            intent_texts = intent.intent_texts.all()
+            intent_texts_serializer = IntentTextSerializer(intent_texts, many=True)
+            response_data = intent_serializer.data
+            response_data['intent_texts'] = intent_texts_serializer.data
+            return Response(response_data)
         except Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
