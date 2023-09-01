@@ -2,7 +2,7 @@ import json
 from django.db import models
 
 class Intent(models.Model):
-    intent = models.CharField(max_length=255) # unique=True надо сделать
+    intent = models.CharField(max_length=255, unique=True)
     function = models.CharField(max_length=255, blank=True)
     entities = models.BooleanField(default=False)
     context_in = models.CharField(max_length=255, blank=True)

@@ -1,11 +1,9 @@
 django
-psycopg2-binary
-openai
 djangorestframework
-python-decouple
 dj_rest_auth
-PyPDF2
-nltk
-numpy
-tensorflow
+psycopg2-binary
 scikit-learn
+tensorflow
+numpy
+python-decouple
+gunicorn

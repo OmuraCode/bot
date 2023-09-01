@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Intent</title>
+    <style>
+        body {
+            font-family: Times News Roman, sans-serif;
+            background-color: #F5F5F5;
+            margin: 120px;
+            padding: 15;
+        }
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .intent-text {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        #add-intent-text {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #add-intent-text:hover {
+            background-color: #0056b3;
+        }
+
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #1e7e34;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .top-right-button {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Создание нового интента(намерения)</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="intent">Интент(название интента должно быть уникальным, например: DataPlan, InternetProblem):</label>
+        <input type="text" id="intent" name="intent" required>
+        {% if errors and errors.intent %}
+        <span class="error">{{ errors.intent.0 }}</span>
+        {% endif %}
+        <br>
+
+<!--        <label for="contect_in">Context in:</label>-->
+<!--        <input type="text" name="context_in"><br>-->
+
+<!--        <label for="context_out">Context-out:</label>-->
+<!--        <input type="text" name="context_out"><br>-->
+
+<!--        <label for="context_clear">Context clear:</label>-->
+<!--        <input type="checkbox" name="context_clear"><br>-->
+
+        <h2>Вопросы и ответы. Поле "вопрос" нужно заполнить несколькими вопросами, отделяя каждый вопрос символом ";"(например: "Интернет не работает; Пропал интернет; Не грузит интернет;" </h2>
+        <a class="top-right-button" href="http://127.0.0.1:8000/api/v1/intents/" target="_blank">
+            Перейти к просмотру всех интентов
+        </a>
+        <div class="intent-texts">
+            <div class="intent-text">
+                <label for="language">Язык: RU</label>
+                <input type="hidden" id="language" name="language[]" value="RU">
+                <label for="texts">Вопросы на русском языке:</label>
+                <textarea name="texts[]" id="texts" required></textarea><br>
+
+                <label for="responses">Ответ на русском языке:</label>
+                <textarea name="responses[]" id="responses" required></textarea><br>
+            </div>
+
+            <div class="intent-text">
+                <label for="language">Язык: KG</label>
+                <input type="hidden" name="language[]" value="KG">
+                <label for="texts">Вопросы на кыргызском языке:</label>
+                <textarea name="texts[]" required></textarea><br>
+
+                <label for="responses">Ответ на кыргызском языке:</label>
+                <textarea name="responses[]" required></textarea><br>
+            </div>
+        </div>
+        <div id="success-message" class="hidden">Интент успешно добавлен!</div>
+
+        <button type="submit">Добавить интент</button>
+    </form>
+
+    <script>
+        document.getElementById("add-intent-text").addEventListener("click", function(e) {
+            e.preventDefault();
+            const intentTextContainer = document.querySelector(".intent-texts");
+            const intentText = document.createElement("div");
+            intentText.innerHTML = `
+                <hr>
+                <label for="language">Language:</label>
+                <input type="text" name="language[]" required><br>
+
+                <label for="texts">Texts:</label>
+                <textarea name="texts[]" required></textarea><br>
+
+                <label for="responses">Responses:</label>
+                <textarea name="responses[]" required></textarea><br>
+            `;
+            intentTextContainer.appendChild(intentText);
+            // Показать всплывающее окно
+            const successMessage = document.getElementById("success-message");
+            successMessage.classList.remove("hidden");
+
+            // Скрыть всплывающее окно через некоторое время (например, 3 секунды)
+            setTimeout(function() {
+                successMessage.classList.add("hidden");
+            }, 3000); // 1000 миллисекунд (1 секунда)
+        });
+    </script>
+</body>
+</html>

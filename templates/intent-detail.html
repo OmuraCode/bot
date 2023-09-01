@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intent Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            margin: 120px;
+            padding: 15;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            height: 7vh;
+            flex-direction: column;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .top-right-button {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Подробный обзор интента</h1>
+    <h2>Информация</h2>
+    <p><strong>ID:</strong> {{ intent_data.id }}</p>
+    <p><strong>Название интента:</strong> {{ intent_data.intent }}</p>
+<!--    <p><strong>Other Fields:</strong> ...</p>-->
+
+    <h2>Вопросы и ответы</h2>
+    <a class="top-right-button" href="http://127.0.0.1:8000/api/v1/create-intent/" target="_blank">
+        Создать новый интент
+    </a>
+    <ul>
+        {% for intent_text in intent_data.intent_texts %}
+        <li>
+            <p><strong>Язык:</strong> {{ intent_text.language }}</p>
+            <p><strong>Вопросы:</strong> {{ intent_text.texts }}</p>
+            <p><strong>Ответы:</strong> {{ intent_text.responses }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Редактирование</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="intent">Название интента:</label>
+        <input type="text" id="intent" name="intent" value="{{ intent_data.intent }}" required><br>
+        <ul>
+            {% for intent_text in intent_data.intent_texts %}
+            <li>
+                <input type="hidden" name="intent_texts[{{ forloop.counter0 }}][id]" value="{{ intent_text.id }}">
+                <label for="language">Язык: {{ intent_text.language }}</label>
+                <input type="text" id="language" name="intent_texts[{{ forloop.counter0 }}][language]" value="{{ intent_text.language }}" required readonly><br>
+                <label for="texts">Вопросы:</label>
+                <textarea id="texts" name="intent_texts[{{ forloop.counter0 }}][texts][]" required>{{ intent_text.texts|join:";" }}</textarea><br>
+                <label for="responses">Ответ:</label>
+                <textarea id="responses" name="intent_texts[{{ forloop.counter0 }}][responses][]" required>{{ intent_text.responses|join:";" }}</textarea><br>
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Редактировать интент</button>
+    </form>
+</body>
+</html>

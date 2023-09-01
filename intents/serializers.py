@@ -12,11 +12,11 @@ class IntentTextSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class IntentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Intent
         fields = '__all__'
 
-    # def to_representation(self, instance):
-    #     repr = super().to_representation(instance)
-
+    def clean_intent(self, value):
+        if Intent.objects.filter(intent=value).exists():
+            raise serializers.ValidationError("Интент с таким названием уже существует!")
+        return value
