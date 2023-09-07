@@ -7,3 +7,4 @@ tensorflow
 numpy
 python-decouple
 gunicorn
+nltk
