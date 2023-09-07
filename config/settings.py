@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     #my apps
     'account',
     'chat',
-    # 'messages'
     'intents'
 ]
 

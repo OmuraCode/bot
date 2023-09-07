@@ -2,13 +2,12 @@ import tensorflow as tf
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from intents.models import Intent, IntentText
-from keras.models import load_model
 
 
 def clean(line):
     cleaned_line = ''
     for char in line:
-        if char.isalpha():
+        if char.isalnum() or char.isspace():
             cleaned_line += char
         else:
             cleaned_line += ' '
@@ -29,8 +28,9 @@ for intent in data:
 
     # Iterate through text associated with the intent
     for text_obj in IntentText.objects.filter(intent=intent):
-        text_input.extend(text_obj.texts)
-        intents.extend([intent.intent] * len(text_obj.texts))
+        cleaned_texts = [clean(text) for text in text_obj.texts]
+        text_input.extend(cleaned_texts)
+        intents.extend([intent.intent] * len(cleaned_texts))
 
         # Create a dictionary to hold responses for the intent
         if intent.intent not in response_for_intent:
@@ -38,6 +38,7 @@ for intent in data:
 
         # Add responses for different languages
         response_for_intent[intent.intent][text_obj.language] = text_obj.responses
+
 
 tokenizer = Tokenizer(filters='', oov_token='<unk>')
 tokenizer.fit_on_texts(text_input)
@@ -61,11 +62,14 @@ index_to_intent = {index: intent for intent, index in intent_to_index.items()}
 
 categorical_vec = tf.keras.utils.to_categorical(categorical_target,
                                                 num_classes=num_classes, dtype='int32')
+print('categorical_vec: ', len(categorical_vec))
+print('num_classes: ', num_classes)
 
 epochs = 100
 embed_dim = 300
 lstm_num = 50
 output_dim = categorical_vec.shape[1]
+print(output_dim)
 input_dim = len(unique_intents)
 
 model = tf.keras.models.Sequential([
@@ -82,11 +86,18 @@ model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['ac
 model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
 loss, accuracy = model.evaluate(padded_sequences, categorical_vec)
 
-model.save('my_model.h5')
+model.save('bot_model.h5')
 
-# Сохраните модель в файл
-# model.save('lstmModel')
-# Загрузка модели
-# loaded_model = load_model('lstmModel')
-# Дообучение модели
-# loaded_model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0, initial_epoch=epochs)
+
+# Дообучение
+# Компилируйте модель
+# optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+# loaded_model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+
+# # Дообучение модели
+# loaded_model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
+# loss, accuracy = loaded_model.evaluate(padded_sequences, categorical_vec)
+#
+# # Сохраните обновленную модель
+# loaded_model.save('updated_model.h5')
+

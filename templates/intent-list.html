@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Полный список намерений</title>
+    <title>Полный список интентов</title>
 </head>
 <style>
     body {
@@ -48,7 +48,7 @@
     }
 </style>
 <body>
-    <h1>Полный список намерений</h1>
+    <h1>Полный список интентов</h1>
     <ul>
         {% for intent in intents %}
             <li><a href="{% url 'intent-detail' intent.id %}">{{ intent.intent }}</a></li>

@@ -1,6 +1,7 @@
 import json
 from django.db import models
 
+
 class Intent(models.Model):
     intent = models.CharField(max_length=255, unique=True)
     function = models.CharField(max_length=255, blank=True)
@@ -11,6 +12,7 @@ class Intent(models.Model):
     entity_type = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 class IntentText(models.Model):
     intent = models.ForeignKey(Intent, on_delete=models.CASCADE, related_name='intent_texts')
@@ -23,7 +25,6 @@ class Entity(models.Model):
     intent1 = models.ForeignKey(Intent, on_delete=models.CASCADE)
     entity1 = models.CharField(max_length=255)
     value = models.CharField(max_length=255, blank=True)
-
 
 
 def load_data_to_database(json_file_path):
