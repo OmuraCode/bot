@@ -21,7 +21,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: bot_db
+      POSTGRES_DB: bot2_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
     volumes:

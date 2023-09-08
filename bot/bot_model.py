@@ -23,7 +23,7 @@ custom_stop_words = ["анан", "кийин", "бирок", "болбосо", "
 
 stop_words.update(custom_stop_words)
 
-print(stop_words)
+# print(stop_words)
 
 def remove_stopwords(text):
     words = text.split()
@@ -183,7 +183,7 @@ model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['ac
 model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
 loss, accuracy = model.evaluate(padded_sequences, categorical_vec)
 
-model.save('bot_model.h5')
+# model.save('bot_model.keras')
 
 
 # Дообучение

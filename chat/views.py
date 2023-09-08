@@ -12,7 +12,7 @@ from keras.preprocessing.sequence import pad_sequences
 from intents.models import Intent, IntentText
 
 
-loaded_model = load_model('bot_model.h5')
+# loaded_model = load_model('bot_model.h5')
 
 
 class ChatbotView(APIView):
@@ -60,7 +60,7 @@ class ChatbotView(APIView):
             else:
                 sent_tokens.append(tokenizer.word_index['<unk>'])
         sent_tokens = tf.expand_dims(sent_tokens, 0)
-        pred = loaded_model.predict(sent_tokens)
+        pred = model.predict(sent_tokens)
         pred_class = np.argmax(pred, axis=1)
         max_pred_prob = np.max(pred)
 

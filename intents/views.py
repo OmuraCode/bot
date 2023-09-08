@@ -27,14 +27,14 @@ class IntentCreateView(View):
             raw_texts_data = request.POST.getlist('texts[]')
             print(raw_texts_data)
             texts_data = [text.split(';') for text in raw_texts_data]
-            print('texts_data: ',texts_data)
+            print('texts_data: ', texts_data)
 
             responses_data = request.POST.getlist('responses[]')
             for language, texts, responses in zip(intent_texts_data, texts_data, responses_data):
                 intent_text_data = {
                     'language': language,
                     'texts': [text.strip() for text in texts],
-                    'responses': [response.strip() for response in responses.split('\n')],
+                    'responses': [response.strip() for response in responses.split(';')],
                     'intent': intent.pk,
                 }
                 intent_text_serializer = IntentTextSerializer(data=intent_text_data)
@@ -80,7 +80,7 @@ class IntentDetailView(APIView):
         try:
             intent = self.get_object(pk)
             intent.delete()
-            return redirect('intent-list')  # Перенаправление на страницу со списком интентов
+            return redirect('intent-list')
         except Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
