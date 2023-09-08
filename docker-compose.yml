@@ -9,6 +9,7 @@ services:
       - .:/usr/src/app/
       - static_volume:/usr/src/app/static
       - media_volume:/usr/src/app/media
+      - model_volume:/usr/src/app/model
     ports:
       - "8000:8000"
     depends_on:
@@ -54,4 +55,4 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
-
+  model_volume:

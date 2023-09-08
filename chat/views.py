@@ -1,20 +1,19 @@
 import tensorflow as tf
 import numpy as np
 import random
-from bot.bot_model import tokenizer, index_to_intent, response_for_intent, model
+from bot.bot_model import tokenizer, index_to_intent, response_for_intent
 from .serializers import ChatbotInputSerializer, ChatbotResponseSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from keras.models import load_model
+# from chat.apps import loaded_model
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from intents.models import Intent, IntentText
 
 
-# loaded_model = load_model('bot_model.h5')
-
-
+loaded_model = load_model('/usr/src/app/model/bot_model.keras')
 class ChatbotView(APIView):
     def post(self, request):
         serializer = ChatbotInputSerializer(data=request.data)
@@ -60,7 +59,7 @@ class ChatbotView(APIView):
             else:
                 sent_tokens.append(tokenizer.word_index['<unk>'])
         sent_tokens = tf.expand_dims(sent_tokens, 0)
-        pred = model.predict(sent_tokens)
+        pred = loaded_model.predict(sent_tokens)
         pred_class = np.argmax(pred, axis=1)
         max_pred_prob = np.max(pred)
 
