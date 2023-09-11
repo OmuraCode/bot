@@ -8,9 +8,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from keras.models import load_model
 # from chat.apps import loaded_model
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-from intents.models import Intent, IntentText
 
 
 loaded_model = load_model('/usr/src/app/model/bot_model.keras')

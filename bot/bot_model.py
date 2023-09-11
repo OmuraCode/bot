@@ -162,12 +162,27 @@ categorical_vec = tf.keras.utils.to_categorical(categorical_target,
 print('categorical_vec: ', len(categorical_vec))
 print('num_classes: ', num_classes)
 
+
+# Создайте колбэк для вывода информации о каждой эпохе в логи
+class LoggingCallback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs=None):
+        print(f'Epoch {epoch + 1}/{epochs} - loss: {logs["loss"]:.4f} - accuracy: {logs["accuracy"]:.4f}')
+
+early_stopping_callback = tf.keras.callbacks.EarlyStopping(
+    monitor='accuracy',  # Мониторим точность на валидационных данных
+    patience=5,  # Количество эпох без улучшения, после которых обучение будет остановлено
+    min_delta=0.00,  # Минимальное улучшение точности на валидационных данных
+    restore_best_weights=True  # Восстановить веса модели до лучшей эпохи
+)
+
+
 epochs = 100
 embed_dim = 300
-lstm_num = 50
+lstm_num = 100
 output_dim = categorical_vec.shape[1]
 print('output_dim: ',output_dim)
 input_dim = len(unique_intents)
+callbacks = [LoggingCallback(), early_stopping_callback]
 
 model = tf.keras.models.Sequential([
     tf.keras.layers.Embedding(len(tokenizer.word_index) + 1, embed_dim),
@@ -177,13 +192,13 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(output_dim, activation='softmax')
 ])
 
-# optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
-# model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
-# # model.summary()
-# model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0)
-# loss, accuracy = model.evaluate(padded_sequences, categorical_vec)
-#
-# model.save('/usr/src/app/model/bot_model.keras')
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+# model.summary()
+model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0, callbacks=callbacks)
+loss, accuracy = model.evaluate(padded_sequences, categorical_vec)
+
+model.save('/usr/src/app/model/bot_model.keras')
 
 
 # Дообучение
