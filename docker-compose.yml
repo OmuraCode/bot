@@ -12,31 +12,6 @@ services:
       - model_volume:/usr/src/app/model
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-      - migration
-
-  db:
-    image: postgres
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: bot2_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-
-  migration:
-    build: .
-    command: >
-      sh -c "python manage.py makemigrations &&
-             python manage.py migrate"
-    volumes:
-      - .:/usr/src/app/
-    depends_on:
-      - db
 
 
   nginx:
