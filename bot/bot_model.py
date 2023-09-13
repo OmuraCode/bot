@@ -178,7 +178,7 @@ early_stopping_callback = tf.keras.callbacks.EarlyStopping(
 
 epochs = 100
 embed_dim = 300
-lstm_num = 100
+lstm_num = 200
 output_dim = categorical_vec.shape[1]
 print('output_dim: ',output_dim)
 input_dim = len(unique_intents)
@@ -194,11 +194,26 @@ model = tf.keras.models.Sequential([
 
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
-# model.summary()
-model.fit(padded_sequences, categorical_vec, epochs=epochs, verbose=0, callbacks=callbacks)
+model.summary()
+model.fit(padded_sequences, categorical_vec, epochs =epochs, verbose=0, callbacks=callbacks)
 loss, accuracy = model.evaluate(padded_sequences, categorical_vec)
 
 model.save('/usr/src/app/model/bot_model.keras')
+
+# model.save_weights('/usr/src/app/model/model_weights.keras')
+
+# new_model = tf.keras.models.Sequential([
+#     tf.keras.layers.Embedding(len(tokenizer.word_index) + 1, embed_dim),
+#     tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(lstm_num, dropout=0.1)),
+#     tf.keras.layers.Dense(lstm_num, activation='relu'),
+#     tf.keras.layers.Dropout(0.4),
+#     tf.keras.layers.Dense(output_dim, activation='softmax')
+# ])
+#
+# optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+# new_model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+# new_model.load_weights('/usr/src/app/model/model_weights.keras')
+
 
 
 # Дообучение

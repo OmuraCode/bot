@@ -1,16 +1,20 @@
 import tensorflow as tf
 import numpy as np
 import random
-from bot.bot_model import tokenizer, index_to_intent, response_for_intent
+from bot.bot_model import tokenizer, index_to_intent, response_for_intent, new_model
 from .serializers import ChatbotInputSerializer, ChatbotResponseSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from keras.models import load_model
+
 # from chat.apps import loaded_model
 
 
 loaded_model = load_model('/usr/src/app/model/bot_model.keras')
+
+
+
 class ChatbotView(APIView):
     def post(self, request):
         serializer = ChatbotInputSerializer(data=request.data)
