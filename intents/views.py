@@ -6,12 +6,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import IntentSerializer, IntentTextSerializer
 from .models import Intent
-# import random
-#
-# def word_permutation(text):
-#     words = text.split()
-#     random.shuffle(words)
-#     return ' '.join(words)
 
 
 class IntentCreateView(View):

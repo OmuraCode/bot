@@ -157,3 +157,11 @@ REST_FRAMEWORK = {
 #         'level': 'DEBUG',  # Установите нужный уровень логирования
 #     },
 # }
+
+
+import sys
+import os
+
+# Добавьте путь к common_modules в sys.path
+COMMON_MODULES_DIR = os.path.join(BASE_DIR, 'bot')
+sys.path.insert(0, COMMON_MODULES_DIR)

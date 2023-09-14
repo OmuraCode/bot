@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Чат с ботом</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        /* Добавьте ваши стили здесь */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #chat-history {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        #user-input {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        #user-message {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        #send-button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Обучение модели</h2>
+    <form action="{% url 'train_model' %}" method="post">
+        {% csrf_token %}
+        <label for="model_name">Название модели:</label>
+        <input type="text" id="model_name" name="model_name" required>
+        <br>
+        <input type="submit" value="Начать обучение">
+    </form>
+
+    <h1>Чат с ботом</h1>
+
+    <div id="chat-container">
+        <div id="chat-history">
+            <!-- Здесь будут отображаться сообщения из чата -->
+        </div>
+        <div id="user-input">
+            <form action="/api/v1/chatbot/" method="POST">
+                <input type="text" id="user-message" name="user_input" placeholder="Введите ваш запрос">
+                <input type="submit" value="Отправить">
+            </form>
+        </div>
+        <div id="bot-response">
+            <!-- Здесь будет отображаться ответ бота -->
+            {{ response }}
+        </div>
+    </div>
+</body>
+</html>
