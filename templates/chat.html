@@ -4,57 +4,84 @@
     <title>Чат с ботом</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
-        /* Добавьте ваши стили здесь */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+    h1, h2 {
+        color: #333;
+    }
 
-        #chat-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
+    h1 {
+        text-align: left;
+        margin-top: 20px;
+        font-size: 16px;
+    }
 
-        #chat-history {
-            height: 300px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        #user-input {
-            display: flex;
-            margin-top: 10px;
-        }
+    #chat-container {
+        max-width: 800px; /* Увеличим максимальную ширину контейнера чата */
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
 
-        #user-message {
-            flex-grow: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
+    #chat-history {
+        height: 300px; /* Высоту истории чата увеличим */
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
 
-        #send-button {
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-    </style>
+    #user-input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    #user-message {
+        flex-grow: 1;
+        padding: 10px; /* Увеличим внутренние отступы поля ввода */
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        outline: none;
+        width: 100%; /* Расширим поле ввода на всю доступную ширину */
+    }
+
+    #send-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #send-button:hover {
+        background-color: #0056b3;
+    }
+
+    #bot-response {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
 </head>
 <body>
-    <h2>Обучение модели</h2>
+    <h1>Сохранение модели</h1>
     <form action="{% url 'train_model' %}" method="post">
         {% csrf_token %}
         <label for="model_name">Название модели:</label>
@@ -63,15 +90,18 @@
         <input type="submit" value="Начать обучение">
     </form>
 
-    <h1>Чат с ботом</h1>
+    <label for="model_name">Выберите модель:</label>
+        <select name="model_name" required>
+            <option value="model1">Модель 1</option>
+            <option value="model2">Модель 2</option>
+            <!-- Добавьте другие доступные модели как option -->
+        </select>
+    <h2>Чат</h2>
 
     <div id="chat-container">
-        <div id="chat-history">
-            <!-- Здесь будут отображаться сообщения из чата -->
-        </div>
         <div id="user-input">
             <form action="/api/v1/chatbot/" method="POST">
-                <input type="text" id="user-message" name="user_input" placeholder="Введите ваш запрос">
+                <input type="text" id="user-message" name="user_input" placeholder="Введите ваш запрос" required>
                 <input type="submit" value="Отправить">
             </form>
         </div>
@@ -82,3 +112,4 @@
     </div>
 </body>
 </html>
+
