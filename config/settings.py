@@ -141,6 +141,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     ]
 }
+SESSION_COOKIE_AGE = 60 * 10
 
 
 

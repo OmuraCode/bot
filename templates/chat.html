@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Чат с ботом</title>
+    <title>Чат-бот</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
+        background-color: #f7f7f7;
         margin: 0;
         padding: 0;
     }
@@ -29,21 +29,21 @@
     #content-container {
         display: flex;
         justify-content: space-between;
-        max-width: 800px;
+        max-width: 1200px; /* Увеличим максимальную ширину контейнера */
         margin: 0 auto;
     }
 
     #left-content, #right-content {
         background-color: #fff;
         padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 8px; /* Увеличим радиус закругления углов */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавим небольшую тень */
         flex-grow: 1;
         margin: 0 10px;
     }
 
     #chat-container {
-        max-height: 400px; /* Увеличим максимальную высоту контейнера чата */
+        max-height: 600px; /* Увеличим максимальную высоту контейнера чата */
         overflow-y: auto;
         border: 1px solid #ccc;
         padding: 10px;
@@ -59,19 +59,19 @@
 
     #user-message {
         flex-grow: 1;
-        padding: 10px; /* Увеличим внутренние отступы поля ввода */
-        border: 1px solid #007bff;
-        border-radius: 5px;
+        padding: 16px; /* Увеличим внутренние отступы поля ввода */
+        border: 2px solid #007bff;
+        border-radius: 16px; /* Увеличим радиус закругления углов */
         outline: none;
         width: 100%; /* Расширим поле ввода на всю доступную ширину */
     }
 
     #send-button, #select-button {
-        padding: 10px 20px;
+        padding: 16px 32px; /* Увеличим отступы кнопок */
         background-color: #007bff;
         color: #fff;
         border: none;
-        border-radius: 5px;
+        border-radius: 16px; /* Увеличим радиус закругления углов кнопок */
         cursor: pointer;
         transition: background-color 0.3s;
         margin-top: 10px;
@@ -82,10 +82,11 @@
     }
 
     #bot-response {
-        padding: 10px;
+        padding: 16px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 8px; /* Увеличим радиус закругления углов ответного блока */
     }
+
     </style>
 </head>
 <body>
@@ -111,7 +112,7 @@
                 <label for="train_model_name">Название модели:</label>
                 <input type="text" id="train_model_name" name="model_name" required>
                 <br>
-                <input type="submit" id="send-button" value="Начать обучение">
+                <input type="submit" id="send-button" value="Сохранить модель">
             </form>
         </div>
     </div>

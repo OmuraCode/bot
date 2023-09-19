@@ -13,13 +13,14 @@ from rest_framework.decorators import action
 import os
 
 # loaded_model = load_model('/usr/src/app/model/2.keras')
+from keras.backend import manual_variable_initialization
+manual_variable_initialization(True)
 
 
 def get_available_models():
     model_dir = '/usr/src/app/model/'
     model_paths = [os.path.join(model_dir, model_name) for model_name in os.listdir(model_dir) if model_name.endswith('.keras')]
     return [(model_name, model_path) for model_name, model_path in zip(os.listdir(model_dir), model_paths)]
-
 
 
 def train_model(request):
@@ -38,8 +39,9 @@ def select_model(request):
     return redirect('chatbot')
 
 class ChatbotView(APIView):
-    def __int__(self, loaded_model):
-        self.loaded_model = loaded_model
+    def __init__(self, *args, **kwargs):
+        self.loaded_model = None  # Initialize loaded_model as None
+        super().__init__(*args, **kwargs)
     def get(self, request, *args, **kwargs):
         available_models = get_available_models()
         return render(request, 'chat.html', {'available_models': available_models})
@@ -47,7 +49,7 @@ class ChatbotView(APIView):
 
     def post(self, request):
         serializer = ChatbotInputSerializer(data=request.data)
-        print(request.data)
+        print(request.data, 'requessssssssssssssset')
         selected_model_path = request.session.get('selected_model')
         if selected_model_path:
             self.loaded_model = load_model(selected_model_path)
@@ -71,15 +73,13 @@ class ChatbotView(APIView):
                     response = 'Пожалуйста, выберите язык: 1 - кыргызский, 2 - русский.'
             else:
                 language_choice = request.session['language_choice']
-
+                response = self.get_response(user_input, language_choice)
             # response_data = {'response': response}
             # response_serializer = ChatbotResponseSerializer(response_data)
 
             # return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-            response = self.get_response(user_input, language_choice)
             return render(request, 'chat.html', {'response': response})
-
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

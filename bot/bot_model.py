@@ -7,6 +7,8 @@ from nltk.corpus import stopwords
 import random
 
 
+from keras.backend import manual_variable_initialization
+manual_variable_initialization(True)
 
 
 nltk.download('stopwords')
