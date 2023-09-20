@@ -5,10 +5,14 @@ from intents.models import Intent, IntentText
 import nltk
 from nltk.corpus import stopwords
 import random
+import numpy as np
 
+# Установите значение seed для модуля random
+seed = 42  # Вы можете выбрать любое целочисленное значение в качестве seed
+random.seed(seed)
 
-from keras.backend import manual_variable_initialization
-manual_variable_initialization(True)
+# Установите значение seed для модуля numpy
+np.random.seed(seed)
 
 
 nltk.download('stopwords')
@@ -26,6 +30,7 @@ custom_stop_words = ["анан", "кийин", "бирок", "болбосо", "
                      "деле", "андай", "мындай", "тигиндей", "ким"]
 
 stop_words.update(custom_stop_words)
+
 
 # print(stop_words)
 
@@ -146,7 +151,6 @@ tokenizer.fit_on_texts(text_input)
 sequences = tokenizer.texts_to_sequences(text_input)
 padded_sequences = pad_sequences(sequences, padding='pre')
 
-
 intent_to_index = {}
 categorical_target = []
 index = 0
@@ -160,7 +164,6 @@ num_classes = len(intent_to_index)
 # Convert intent_to_index to index_to_intent
 index_to_intent = {index: intent for intent, index in intent_to_index.items()}
 
-
 categorical_vec = tf.keras.utils.to_categorical(categorical_target,
                                                 num_classes=num_classes, dtype='int32')
 print('categorical_vec: ', len(categorical_vec))
@@ -172,6 +175,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         print(f'Epoch {epoch + 1}/{epochs} - loss: {logs["loss"]:.4f} - accuracy: {logs["accuracy"]:.4f}')
 
+
 early_stopping_callback = tf.keras.callbacks.EarlyStopping(
     monitor='accuracy',  # Мониторим точность на валидационных данных
     patience=5,  # Количество эпох без улучшения, после которых обучение будет остановлено
@@ -179,14 +183,15 @@ early_stopping_callback = tf.keras.callbacks.EarlyStopping(
     restore_best_weights=True  # Восстановить веса модели до лучшей эпохи
 )
 
-
 epochs = 100
 embed_dim = 300
 lstm_num = 200
 output_dim = categorical_vec.shape[1]
-print('output_dim: ',output_dim)
+print('output_dim: ', output_dim)
 input_dim = len(unique_intents)
 callbacks = [LoggingCallback(), early_stopping_callback]
+
+
 #
 # model = tf.keras.models.Sequential([
 #     tf.keras.layers.Embedding(len(tokenizer.word_index) + 1, embed_dim),
@@ -206,7 +211,6 @@ callbacks = [LoggingCallback(), early_stopping_callback]
 
 
 def train_bot_model(model_name, epochs=epochs, embed_dim=embed_dim, lstm_num=lstm_num):
-
     # Создание и компиляция модели
     model = tf.keras.models.Sequential([
         tf.keras.layers.Embedding(len(tokenizer.word_index) + 1, embed_dim),
@@ -228,7 +232,6 @@ def train_bot_model(model_name, epochs=epochs, embed_dim=embed_dim, lstm_num=lst
 
     return f"Обучение модели '{model_name}' завершено и модель сохранена как '{model_filename}'"
 
-
 # Дообучение
 # Компилируйте модель
 # optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
@@ -240,4 +243,3 @@ def train_bot_model(model_name, epochs=epochs, embed_dim=embed_dim, lstm_num=lst
 #
 # # Сохраните обновленную модель
 # loaded_model.save('updated_model.h5')
-

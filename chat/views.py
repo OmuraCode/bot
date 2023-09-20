@@ -13,8 +13,13 @@ from rest_framework.decorators import action
 import os
 
 # loaded_model = load_model('/usr/src/app/model/2.keras')
-from keras.backend import manual_variable_initialization
-manual_variable_initialization(True)
+
+import random
+import numpy as np
+
+# Установите значение seed для модуля random
+seed = 42  # Вы можете выбрать любое целочисленное значение в качестве seed
+random.seed(seed)
 
 
 def get_available_models():

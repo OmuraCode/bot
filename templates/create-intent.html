@@ -95,7 +95,7 @@
     <h1>Создание нового интента(намерения)</h1>
     <form method="post">
         {% csrf_token %}
-        <label for="intent">Интент(название интента должно быть уникальным, например: DataPlan, InternetProblem):</label>
+        <label for="intent">Интент(название интента должно быть уникальным):</label>
         <input type="text" id="intent" name="intent" required>
         {% if errors and errors.intent %}
         <span class="error">{{ errors.intent.0 }}</span>
