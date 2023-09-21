@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Чат-бот</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+<!--    <link rel="stylesheet" type="text/css" href="styles.css">-->
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -11,17 +11,8 @@
         padding: 0;
     }
 
-    h1, h2 {
-        color: #333;
-    }
-
-    h1 {
-        text-align: left;
-        margin-top: 20px;
-        font-size: 16px;
-    }
-
     h2 {
+        color: #333;
         text-align: center;
         margin-bottom: 20px;
     }
@@ -29,49 +20,57 @@
     #content-container {
         display: flex;
         justify-content: space-between;
-        max-width: 1200px; /* Увеличим максимальную ширину контейнера */
+        max-width: 800px;
         margin: 0 auto;
     }
 
     #left-content, #right-content {
         background-color: #fff;
         padding: 20px;
-        border-radius: 8px; /* Увеличим радиус закругления углов */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Добавим небольшую тень */
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         flex-grow: 1;
         margin: 0 10px;
     }
 
     #chat-container {
-        max-height: 600px; /* Увеличим максимальную высоту контейнера чата */
+        max-height: 500px;
         overflow-y: auto;
         border: 1px solid #ccc;
         padding: 10px;
         margin-bottom: 10px;
     }
 
+    #chat-history-container {
+    max-height: 480px; /* Небольшое понижение максимальной высоты */
+    overflow-y: auto;
+    }
+
     #user-input {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 10px;
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        padding: 10px 20px;
     }
 
     #user-message {
         flex-grow: 1;
-        padding: 16px; /* Увеличим внутренние отступы поля ввода */
+        padding: 16px;
         border: 2px solid #007bff;
-        border-radius: 16px; /* Увеличим радиус закругления углов */
+        border-radius: 16px;
         outline: none;
-        width: 100%; /* Расширим поле ввода на всю доступную ширину */
+        width: 100%;
     }
 
     #send-button, #select-button {
-        padding: 16px 32px; /* Увеличим отступы кнопок */
+        padding: 16px 32px;
         background-color: #007bff;
         color: #fff;
         border: none;
-        border-radius: 16px; /* Увеличим радиус закругления углов кнопок */
+        border-radius: 16px;
         cursor: pointer;
         transition: background-color 0.3s;
         margin-top: 10px;
@@ -82,16 +81,30 @@
     }
 
     #bot-response {
+        background-color: #007bff;
+        color: #fff;
         padding: 16px;
         border: 1px solid #ccc;
-        border-radius: 8px; /* Увеличим радиус закругления углов ответного блока */
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
+    .chat-message {
+        background-color: #fff;
+        color: #333;
+        padding: 10px 16px;
+        border-radius: 8px;
+        margin: 5px 0;
+        word-wrap: break-word;
+    }
     </style>
+
 </head>
 <body>
     <h2>Чат</h2>
-
     <div id="content-container">
         <div id="left-content">
             <form action="{% url 'select_model' %}" method="post">
@@ -106,6 +119,7 @@
                 <input type="submit" id="select-button" value="Выбрать модель">
             </form>
         </div>
+
         <div id="right-content">
             <form action="{% url 'train_model' %}" method="post">
                 {% csrf_token %}
@@ -118,18 +132,39 @@
     </div>
 
     <div id="chat-container">
+        <div id="chat-history-container">
+            <!-- История чата будет отображаться здесь -->
+            {% for message in chat_history %}
+                <div class="chat-message">{{ message }}</div>
+            {% endfor %}
+        </div>
         <div id="user-input">
             <form action="/api/v1/chatbot/" method="POST">
                 <input type="text" id="user-message" name="user_input" placeholder="Введите ваш запрос" required>
                 <input type="submit" id="send-button" value="Отправить">
             </form>
         </div>
-        <div id="bot-response">
-            <!-- Здесь будет отображаться ответ бота -->
-            {{ response }}
-        </div>
     </div>
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Function to scroll to the bottom of the chat history container
+    function scrollToBottom() {
+        var chatHistoryContainer = document.getElementById("chat-history-container");
+        chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
+    }
 
+    // Example of adding a new message to the chat history
+    function addMessage(messageText) {
+        var chatHistoryContainer = $("#chat-history-container");
+        var newMessage = $("<div class='chat-message'></div>").text(messageText);
+        chatHistoryContainer.append(newMessage);
+        scrollToBottom(); // Scroll to the bottom after adding a new message
+    }
+
+    // You can use addMessage() to add new messages dynamically in response to user interactions.
+});
+</script>
 

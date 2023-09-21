@@ -54,16 +54,19 @@ class ChatbotView(APIView):
 
     def post(self, request):
         serializer = ChatbotInputSerializer(data=request.data)
-        print(request.data, 'requessssssssssssssset')
         selected_model_path = request.session.get('selected_model')
         if selected_model_path:
             self.loaded_model = load_model(selected_model_path)
-            print(selected_model_path, 'выбор')
         else:
             self.loaded_model = load_model('/usr/src/app/model/1.keras')
 
         if serializer.is_valid():
             user_input = serializer.validated_data['user_input']
+            user_input = user_input.lower()
+
+            chat_history = request.session.get('chat_history', [])
+            user_message = f"Пользователь: {user_input}"
+            chat_history.append(user_message)
 
             # Check if language choice is needed
             if 'language_choice' not in request.session:
@@ -79,12 +82,13 @@ class ChatbotView(APIView):
             else:
                 language_choice = request.session['language_choice']
                 response = self.get_response(user_input, language_choice)
-            # response_data = {'response': response}
-            # response_serializer = ChatbotResponseSerializer(response_data)
 
-            # return Response(response_serializer.data, status=status.HTTP_200_OK)
+            bot_message = f"Бот: {response}"
+            chat_history.append(bot_message)
 
-            return render(request, 'chat.html', {'response': response})
+            request.session['chat_history'] = chat_history
+
+            return render(request, 'chat.html', {'response': response, 'chat_history': chat_history})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

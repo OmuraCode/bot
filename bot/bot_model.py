@@ -44,7 +44,7 @@ def clean(line):
     cleaned_line = ''
     for char in line:
         if char.isalnum() or char.isspace():
-            cleaned_line += char
+            cleaned_line += char.lower()
         else:
             cleaned_line += ' '
     cleaned_line = ' '.join(cleaned_line.split())
@@ -190,7 +190,6 @@ output_dim = categorical_vec.shape[1]
 print('output_dim: ', output_dim)
 input_dim = len(unique_intents)
 callbacks = [LoggingCallback(), early_stopping_callback]
-
 
 #
 # model = tf.keras.models.Sequential([
