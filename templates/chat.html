@@ -42,16 +42,27 @@
     }
 
     #chat-history-container {
-    max-height: 480px; /* Небольшое понижение максимальной высоты */
-    overflow-y: auto;
+        max-height: 380px; /* Небольшое понижение максимальной высоты */
+        overflow-y: auto
     }
 
-    #user-input {
+    /* #user-input {
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: sticky;
         bottom: 0;
+        background-color: #fff;
+        padding: 10px 20px;
+    } */
+
+    #user-input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         background-color: #fff;
         padding: 10px 20px;
     }
@@ -93,7 +104,7 @@
     }
 
     .chat-message {
-        background-color: #fff;
+        background-color: #c0e6ff;
         color: #333;
         padding: 10px 16px;
         border-radius: 8px;
@@ -150,21 +161,53 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Function to scroll to the bottom of the chat history container
-    function scrollToBottom() {
+    // Function to scroll to the last message in the chat history
+    function scrollToLastMessage() {
         var chatHistoryContainer = document.getElementById("chat-history-container");
         chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
     }
 
-    // Example of adding a new message to the chat history
-    function addMessage(messageText) {
+    // Function to add a new message to the chat history
+    function addMessage(messageText, isUser) {
         var chatHistoryContainer = $("#chat-history-container");
-        var newMessage = $("<div class='chat-message'></div>").text(messageText);
-        chatHistoryContainer.append(newMessage);
-        scrollToBottom(); // Scroll to the bottom after adding a new message
+        var messageClass = isUser ? "user-message" : "bot-message";
+        var newMessage = $("<div class='chat-message " + messageClass + "'></div>").text(messageText);
+
+        // Prepend the new message to the beginning of the chat history
+        chatHistoryContainer.prepend(newMessage);
+
+        scrollToLastMessage(); // Scroll to the last message after adding a new message
     }
 
-    // You can use addMessage() to add new messages dynamically in response to user interactions.
+    // Scroll to the last message initially
+    scrollToLastMessage();
+
+    // Handle textarea input
+    $("#user-message").on("input", function() {
+        // Handle input changes here if needed
+    });
+
+    // Handle form submission (you can customize this)
+    $("#chat-form").submit(function(event) {
+        event.preventDefault();
+        var userInput = $("#user-message").val();
+
+        // Add the user's message to the chat history
+        addMessage(userInput, true);
+
+        // Replace this with your bot response logic
+        // Simulate a bot response using setTimeout for demonstration
+        setTimeout(function() {
+            var botResponse = "This is a simple bot response.";
+            addMessage(botResponse, false);
+        }, 1000);
+
+        // Clear the textarea
+        $("#user-message").val("");
+
+        // Scroll to the last message after submitting the user's message
+        scrollToLastMessage();
+    });
 });
 </script>
 
